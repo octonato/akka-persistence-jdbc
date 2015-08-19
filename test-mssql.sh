@@ -6,4 +6,4 @@ source include.sh
 #   https://github.com/fgrehm/vagrant-mssql-express
 # If installed and configured with default parameters then the following should work for you:
 
-sbt -Dmssql.host=192.168.50.4 -Djdbc-connection.username=sa -Djdbc-connection.password='#SAPassword!' "test-only *Mssql*"
+#sbt -Dmssql.host=192.168.50.4 -Djdbc-connection.username=sa -Djdbc-connection.password='#SAPassword!' "test-only *Mssql*"

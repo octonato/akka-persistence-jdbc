@@ -76,6 +76,16 @@ trait JdbcSyncSnapshotStoreSpec extends SnapshotStoreSpec with JdbcInit {
         case lssr @ LoadSnapshotResult(Some(SelectedSnapshot(SnapshotMetadata(`pid`, 999, _), MacBeth.text)), _) ⇒ lssr
       }
     }
+
+    "be able to store a whole lot of snapshots with the same seqNo" in {
+      val senderProbe = TestProbe()
+      val pid = "pid-1000-save-same-id"
+      Stream.continually(1).take(1000000).foreach { seqNo ⇒
+        val metadata = SnapshotMetadata(persistenceId = pid, sequenceNr = seqNo, timestamp = System.currentTimeMillis())
+        snapshotStore.tell(SaveSnapshot(metadata, MacBeth.text), senderProbe.ref)
+        senderProbe.expectMsgPF(1.minute) { case SaveSnapshotSuccess(md) ⇒ md }
+      }
+    }
   }
 
   override def beforeAll() {
