@@ -16,22 +16,21 @@
 
 package akka.persistence.jdbc.serialization
 
-import java.nio.ByteBuffer
-
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.persistence.journal.Tagged
-import akka.persistence.{ AtomicWrite, PersistentRepr }
-import akka.serialization.{ Serialization, SerializationExtension }
+import akka.persistence.{AtomicWrite, PersistentRepr}
+import akka.serialization.{Serialization, SerializationExtension}
 import akka.stream.scaladsl.Flow
 
 import scala.compat.Platform
-import scala.util.{ Failure, Success, Try }
+import scala.util.{Failure, Success, Try}
 
-case class Serialized(persistenceId: String, sequenceNr: Long, serialized: Array[Byte], tags: Option[String] = None, created: Long = Platform.currentTime)
+case class Serialized(persistenceId: String, sequenceNr: Long, serialized: Array[Byte], repr: PersistentRepr, tags: Option[String] = None, created: Long = Platform.currentTime)
 
 trait SerializationProxy {
   def serialize(o: AnyRef): Try[Array[Byte]]
+
   def deserialize[A](bytes: Array[Byte], clazz: Class[A]): Try[A]
 }
 
@@ -44,7 +43,7 @@ class AkkaSerializationProxy(serialization: Serialization) extends Serialization
   override def serialize(o: AnyRef): Try[Array[Byte]] = o match {
     case arr: Array[Byte] ⇒ Success(arr) // when you passed an Array[Byte] to be persisted,
     // you probably don't want to serialize the array
-    case _                ⇒ serialization.serialize(o)
+    case _ ⇒ serialization.serialize(o)
   }
 
   override def deserialize[A](bytes: Array[Byte], clazz: Class[A]): Try[A] =
@@ -52,20 +51,20 @@ class AkkaSerializationProxy(serialization: Serialization) extends Serialization
 }
 
 /**
- * We need to preserve the order / size of this sequence
- * We must NOT catch serialization exceptions here because rejections will cause
- * holes in the sequence number series and we use the sequence numbers to detect
- * missing (delayed) events in the eventByTag query
- *
- * Returns the serialized PersistentRepr, all fields will be serialized using
- * akka serialization which means that *all* fields of the PersistentRepr
- * including the payload. Note that when there is no serializer configured for
- * the type of the payload, the default Java Serializer will be used, which may
- * cause problems in the future,
- *
- * see: http://doc.akka.io/docs/akka/2.4.1/scala/persistence-schema-evolution.html
- *
- */
+  * We need to preserve the order / size of this sequence
+  * We must NOT catch serialization exceptions here because rejections will cause
+  * holes in the sequence number series and we use the sequence numbers to detect
+  * missing (delayed) events in the eventByTag query
+  *
+  * Returns the serialized PersistentRepr, all fields will be serialized using
+  * akka serialization which means that *all* fields of the PersistentRepr
+  * including the payload. Note that when there is no serializer configured for
+  * the type of the payload, the default Java Serializer will be used, which may
+  * cause problems in the future,
+  *
+  * see: http://doc.akka.io/docs/akka/2.4.1/scala/persistence-schema-evolution.html
+  *
+  */
 object SerializationFacade {
   def apply(system: ActorSystem, separatorChar: String): SerializationFacade =
     new SerializationFacade(new AkkaSerializationProxy(SerializationExtension(system)), separatorChar)
@@ -78,18 +77,20 @@ object SerializationFacade {
 }
 
 class SerializationFacade(proxy: SerializationProxy, separator: String) {
+
   import SerializationFacade._
 
   def decodeTags(tags: String): List[String] =
     SerializationFacade.decodeTags(tags, separator)
 
   /**
-   * Serializes an [[akka.persistence.AtomicWrite]]
-   */
-  private def serializeAtomicWrite(atomicWrite: AtomicWrite): Try[Iterable[Serialized]] = {
-    def serializeARepr(repr: PersistentRepr, tags: Set[String] = Set.empty[String]): Try[Serialized] = for {
-      byteArray ← proxy.serialize(repr)
-    } yield Serialized(repr.persistenceId, repr.sequenceNr, byteArray, encodeTags(tags, separator))
+    * Serializes an [[akka.persistence.AtomicWrite]]
+    */
+  private def serializeAtomicWrite(atomicWrite: AtomicWrite, fullSerialization: Boolean): Try[Iterable[Serialized]] = {
+    def serializeARepr(repr: PersistentRepr, tags: Set[String] = Set.empty[String]): Try[Serialized] =
+      if (fullSerialization) proxy.serialize(repr) map { serializedReprAsByteArray =>
+        Serialized(repr.persistenceId, repr.sequenceNr, serializedReprAsByteArray, repr, encodeTags(tags, separator))
+      } else Success(Serialized(repr.persistenceId, repr.sequenceNr, Array.empty[Byte], repr, encodeTags(tags, separator)))
 
     def serializeTaggedOrRepr(repr: PersistentRepr): Try[Serialized] = repr.payload match {
       case Tagged(payload, tags) ⇒
@@ -101,18 +102,18 @@ class SerializationFacade(proxy: SerializationProxy, separator: String) {
     if (xs.exists(_.isFailure)) Failure(new RuntimeException("Could not serialize: " + atomicWrite))
     else Success(xs.foldLeft(List.empty[Serialized]) {
       case (xy, Success(serialized)) ⇒ xy :+ serialized
-      case (xy, _)                   ⇒ xy
+      case (xy, _) ⇒ xy
     })
   }
 
   /**
-   * An [[akka.persistence.AtomicWrite]] contains a Sequence of events (with metadata, the PersistentRepr)
-   * that must all be persisted or all fail, what makes the operation atomic. The flow converts
-   * [[akka.persistence.AtomicWrite]] and converts them to a Try[Iterable[Serialized]]. The Try denotes
-   * whether there was a problem with the AtomicWrite or not.
-   */
-  def serialize: Flow[AtomicWrite, Try[Iterable[Serialized]], NotUsed] =
-    Flow[AtomicWrite].map(serializeAtomicWrite)
+    * An [[akka.persistence.AtomicWrite]] contains a Sequence of events (with metadata, the PersistentRepr)
+    * that must all be persisted or all fail, what makes the operation atomic. The flow converts
+    * [[akka.persistence.AtomicWrite]] and converts them to a Try[Iterable[Serialized]]. The Try denotes
+    * whether there was a problem with the AtomicWrite or not.
+    */
+  def serialize(fullSerialization: Boolean): Flow[AtomicWrite, Try[Iterable[Serialized]], NotUsed] =
+    Flow[AtomicWrite].map(atomicWrite => serializeAtomicWrite(atomicWrite, fullSerialization))
 
   def persistentFromByteArray(bytes: Array[Byte]): Try[PersistentRepr] =
     proxy.deserialize(bytes, classOf[PersistentRepr])

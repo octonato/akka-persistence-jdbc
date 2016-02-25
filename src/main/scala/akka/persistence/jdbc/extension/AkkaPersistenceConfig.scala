@@ -132,6 +132,8 @@ trait AkkaPersistenceConfig {
   def inMemory: Boolean
 
   def inMemoryTimeout: FiniteDuration
+
+  def fullSerialization: Boolean
 }
 
 class AkkaPersistenceConfigImpl()(implicit val system: ExtendedActorSystem) extends AkkaPersistenceConfig with Extension {
@@ -162,6 +164,9 @@ class AkkaPersistenceConfigImpl()(implicit val system: ExtendedActorSystem) exte
 
   override def inMemoryTimeout: FiniteDuration =
     FiniteDuration(system.settings.config.getDuration("akka-persistence-jdbc.inMemoryTimeout", TimeUnit.SECONDS), TimeUnit.SECONDS)
+
+  override def fullSerialization: Boolean =
+    system.settings.config.getBoolean("akka-persistence-jdbc.fullSerialization")
 
   def debugInfo: String =
     s"""
