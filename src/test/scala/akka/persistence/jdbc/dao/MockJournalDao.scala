@@ -17,6 +17,7 @@
 package akka.persistence.jdbc.dao
 
 import akka.NotUsed
+import akka.persistence.PersistentRepr
 import akka.persistence.jdbc.serialization.{ SerializationResult, Serialized }
 import akka.stream.scaladsl.{ Flow, Source }
 
@@ -41,7 +42,7 @@ class MockJournalDao(fail: Boolean = false) extends JournalDao {
     if (fail) Future.failed(new RuntimeException("Mock cannot delete message to")) else Future.successful(())
 
   override def messages(persistenceId: String, fromSequenceNr: Long, toSequenceNr: Long, max: Long): Source[SerializationResult, NotUsed] =
-    Source.single(Serialized("", 1, Array.empty[Byte], None)).map(e ⇒ if (fail) throw new RuntimeException("Mock cannot read message") else e)
+    Source.single(Serialized("", 1, Array.empty[Byte], PersistentRepr("", 1, ""), None)).map(e ⇒ if (fail) throw new RuntimeException("Mock cannot read message") else e)
 
   override def allPersistenceIdsSource: Source[String, NotUsed] =
     Source.single("pid-1").map(e ⇒ if (fail) throw new RuntimeException("Mock cannot read message") else e)
@@ -50,8 +51,8 @@ class MockJournalDao(fail: Boolean = false) extends JournalDao {
     if (fail) Future.failed(new RuntimeException("Mock cannot delete message to")) else Future.successful(Nil)
 
   override def eventsByTag(tag: String, offset: Long): Source[SerializationResult, NotUsed] =
-    Source.single(Serialized("", 1, Array.empty[Byte], None)).map(e ⇒ if (fail) throw new RuntimeException("Mock cannot eventsByTag") else e)
+    Source.single(Serialized("", 1, Array.empty[Byte], PersistentRepr("", 1, ""), None)).map(e ⇒ if (fail) throw new RuntimeException("Mock cannot eventsByTag") else e)
 
   override def eventsByPersistenceIdAndTag(persistenceId: String, tag: String, offset: Long): Source[SerializationResult, NotUsed] =
-    Source.single(Serialized("", 1, Array.empty[Byte], None)).map(e ⇒ if (fail) throw new RuntimeException("Mock cannot eventsByPersistenceIdAndTag") else e)
+    Source.single(Serialized("", 1, Array.empty[Byte], PersistentRepr("", 1, ""), None)).map(e ⇒ if (fail) throw new RuntimeException("Mock cannot eventsByPersistenceIdAndTag") else e)
 }

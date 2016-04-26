@@ -18,6 +18,7 @@ package akka.persistence.jdbc.dao.varchar
 
 import akka.NotUsed
 import akka.actor.ActorSystem
+import akka.persistence.PersistentRepr
 import akka.persistence.jdbc.dao.JournalDao
 import akka.persistence.jdbc.dao.varchar.JournalTables.JournalRow
 import akka.persistence.jdbc.extension.AkkaPersistenceConfig
@@ -32,51 +33,9 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
- * The resulting byte array must be a PersistentRepr, so the serializer must
- * deconstruct a PersistentRepr from a byte array and create a serialization format
- * that contains all of the fields necessary for the deserialization step to reconstruct
- * the PersistentRepr. The serialization format must contain the following fields:
- * <ul>
- * <li>payload: Any</li>
- * <li>sequenceNr: Long</li>
- * <li>persistenceId: String</li>
- * <li>manifest: String</li>
- * <li>deleted: Boolean</li>
- * <li>sender: ActorRef</li>
- * <li>writerUuid: String</li>
- * </ul>
- * Some serialize/deserialize flows:
- * <ul>
- * <li>serialize: (PersistentRepr as Byte Array => SERIALIZATION_FORMAT)</li>
- * <li>deserialize: (SERIALIZATION_FORMAT => PersistentRepr as Byte Array)</li>
- * </ul>
- * for example:
- * <ul>
- * <li>serialize: PersistentRepr as Byte Array => Base64</li>
- * <li>deserialize: Base64 => PersistentRepr as Byte Array</li>
- * </li>
- *
- */
-trait VarcharSerialization {
-  def serialize(bytes: Array[Byte], serializer: Serializer): Array[Byte] = serializer.toBinary(bytes)
-
-  def serialize(xs: Iterable[SerializationResult], serializer: Serializer): Try[Iterable[SerializationResult]] =
-    Try(xs.collect { case e: Serialized ⇒ e }.map(e ⇒ e.copy(serialized = serialize(e.serialized, serializer))))
-
-  def deserialize(message: String, serializer: Serializer): Array[Byte] = serializer.fromBinary(message.getBytes(`UTF-8`)) match {
-    case xs: Array[Byte] ⇒ xs
-    case other           ⇒ throw new IllegalArgumentException("VarcharSerialization only accepts byte arrays, not [" + other + "]")
-  }
-
-  final val `UTF-8` = "UTF-8"
-
-  def toByteArray(message: String): Array[Byte] = message.getBytes(`UTF-8`)
-}
-
-/**
  * The DefaultJournalDao contains all the knowledge to persist and load serialized journal entries
  */
-class VarcharJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, system: ActorSystem) extends JournalDao with VarcharSerialization {
+class VarcharJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, system: ActorSystem) extends JournalDao {
 
   import profile.api._
 
@@ -85,6 +44,8 @@ class VarcharJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, syst
   implicit val mat: Materializer = ActorMaterializer()(system)
 
   val serialization: Serialization = SerializationExtension(system)
+
+  val persistentReprSerializer: Serializer = serialization.serializerFor(classOf[PersistentRepr])
 
   val config: AkkaPersistenceConfig = AkkaPersistenceConfig(system)
 
@@ -130,11 +91,14 @@ class VarcharJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, syst
     db.run(actions)
   }
 
+  /**
+   * Assumes that the message contains a serialized PersistentRepr
+   */
   def mapToSerialized(row: JournalRow): Serialized = {
-    val deserializedRow: Array[Byte] = getSerializer
+    val deserializedMessage: Array[Byte] = getSerializer
       .map(serializer ⇒ deserialize(row.message, serializer))
       .getOrElse(toByteArray(row.message))
-    Serialized(row.persistenceId, row.sequenceNumber, deserializedRow, row.tags, row.created)
+    Serialized(row.persistenceId, row.sequenceNumber, deserializedMessage, persistentReprSerializer.fromBinary(deserializedMessage).asInstanceOf[PersistentRepr], row.tags, row.created)
   }
 
   override def messages(persistenceId: String, fromSequenceNr: Long, toSequenceNr: Long, max: Long): Source[SerializationResult, NotUsed] =

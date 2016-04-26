@@ -29,7 +29,7 @@ import slick.jdbc.JdbcBackend
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class VarcharSnapshotDao(db: JdbcBackend#Database, val profile: JdbcProfile, system: ActorSystem) extends SnapshotDao with VarcharSerialization {
+class VarcharSnapshotDao(db: JdbcBackend#Database, val profile: JdbcProfile, system: ActorSystem) extends SnapshotDao {
   import profile.api._
 
   implicit val ec: ExecutionContext = system.dispatcher

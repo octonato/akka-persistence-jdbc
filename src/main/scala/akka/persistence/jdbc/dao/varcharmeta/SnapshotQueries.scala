@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package akka.persistence.jdbc.dao.varchar
+package akka.persistence.jdbc.dao.varcharmeta
 
-import akka.persistence.jdbc.dao.varchar.SnapshotTables.SnapshotRow
+import akka.persistence.jdbc.dao.varcharmeta.SnapshotTables.SnapshotRow
 import akka.persistence.jdbc.extension.SnapshotTableConfiguration
 import slick.driver.JdbcProfile
 

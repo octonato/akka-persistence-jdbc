@@ -28,15 +28,15 @@ object Base64Serializer {
     java.util.Base64.getUrlDecoder.decode(bytes)
 }
 
-/**
- * Encodes/decodes a PersistentRepr
- */
 class Base64Serializer(val system: ExtendedActorSystem) extends BaseSerializer {
-  override def includeManifest: Boolean = false
+  override def includeManifest: Boolean = true
 
-  /**
-   * Assumes the received byte array is a Base64 encoded PersistentRepr
-   */
+  def serialize(obj: AnyRef, serializer: Serializer): Array[Byte] =
+    serializer.toBinary(obj)
+
+  def serialize(obj: AnyRef, clazz: Class[_]): Array[Byte] =
+    serialize(obj, SerializationExtension(system).serializerFor(clazz))
+
   override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef =
     decodeBase64(bytes)
 
@@ -47,7 +47,8 @@ class Base64Serializer(val system: ExtendedActorSystem) extends BaseSerializer {
   override def toBinary(obj: AnyRef): Array[Byte] = obj match {
     case str: String     ⇒ encodeBase64(str.getBytes("UTF-8"))
     case xs: Array[Byte] ⇒ encodeBase64(xs)
-    case other           ⇒ throw new IllegalArgumentException("Base64Serializer only serializes byte arrays and strings not [" + other + "]")
+    case o ⇒
+      val toJava = serialize(_: AnyRef, o.getClass)
+      (toJava andThen encodeBase64 _)(o)
   }
-
 }

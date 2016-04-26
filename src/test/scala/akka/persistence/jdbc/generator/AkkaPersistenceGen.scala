@@ -43,7 +43,7 @@ object AkkaPersistenceGen {
     persistenceId ← Gen.alphaStr
     sequenceNr ← genSeqNum
     buff ← genByteBuff
-  } yield Serialized(persistenceId, sequenceNr, buff)
+  } yield Serialized(persistenceId, sequenceNr, buff, PersistentRepr(buff, sequenceNr, persistenceId))
 
   val genListOfSerialized = Gen.listOf(genSerialized)
 

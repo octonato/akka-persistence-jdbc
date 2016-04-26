@@ -29,6 +29,7 @@ object Schema {
   sealed trait SchemaType { def schema: String }
   final case class Postgres(val schema: String = "schema/postgres/postgres-schema.sql") extends SchemaType
   final case class PostgresVarchar(val schema: String = "schema/postgres/postgres-varchar-schema.sql") extends SchemaType
+  final case class PostgresVarcharMeta(val schema: String = "schema/postgres/postgres-varchar-meta-schema.sql") extends SchemaType
   final case class MySQL(val schema: String = "schema/mysql/mysql-schema.sql") extends SchemaType
   final case class MySQLVarchar(val schema: String = "schema/mysql/mysql-varchar-schema.sql") extends SchemaType
   final case class Oracle(val schema: String = "schema/oracle/oracle-schema.sql") extends SchemaType

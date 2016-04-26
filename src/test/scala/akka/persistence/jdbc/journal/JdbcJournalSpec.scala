@@ -71,6 +71,10 @@ class PostgresVarcharJournalSpec extends JdbcJournalSpec(ConfigFactory.load("pos
   dropCreate(PostgresVarchar())
 }
 
+class PostgresVarcharMetaJournalSpec extends JdbcJournalSpec(ConfigFactory.load("postgres-varchar-meta-application.conf")) {
+  dropCreate(PostgresVarcharMeta())
+}
+
 /**
  * Does not (yet) work because Slick generates double quotes to escape field names
  * for some reason when creating the DDL

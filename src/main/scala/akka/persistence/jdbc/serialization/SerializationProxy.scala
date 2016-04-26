@@ -32,7 +32,7 @@ sealed trait SerializationResult {
   def tags: Option[String]
   def created: Long
 }
-final case class Serialized(persistenceId: String, sequenceNr: Long, serialized: Array[Byte], tags: Option[String] = None, created: Long = Platform.currentTime) extends SerializationResult
+final case class Serialized(persistenceId: String, sequenceNr: Long, serialized: Array[Byte], persistentRepr: PersistentRepr, tags: Option[String] = None, created: Long = Platform.currentTime) extends SerializationResult
 final case class NotSerialized(persistenceId: String, sequenceNr: Long, persistentRepr: PersistentRepr, tags: Option[String], created: Long = Platform.currentTime) extends SerializationResult
 
 trait SerializationProxy {
@@ -94,7 +94,7 @@ class SerializationFacade(proxy: SerializationProxy, separator: String) {
    */
   private def serializeAtomicWrite(atomicWrite: AtomicWrite, serialize: Boolean): Try[Iterable[SerializationResult]] = {
     def serializeARepr(repr: PersistentRepr, tags: Set[String] = Set.empty[String]): Try[SerializationResult] =
-      if (serialize) proxy.serialize(repr).map(byteArray ⇒ Serialized(repr.persistenceId, repr.sequenceNr, byteArray, encodeTags(tags, separator)))
+      if (serialize) proxy.serialize(repr).map(byteArray ⇒ Serialized(repr.persistenceId, repr.sequenceNr, byteArray, repr, encodeTags(tags, separator)))
       else Success(NotSerialized(repr.persistenceId, repr.sequenceNr, repr, encodeTags(tags, separator)))
 
     def serializeTaggedOrRepr(repr: PersistentRepr): Try[SerializationResult] = repr.payload match {
@@ -121,8 +121,8 @@ class SerializationFacade(proxy: SerializationProxy, separator: String) {
     Flow[AtomicWrite].map(aw ⇒ serializeAtomicWrite(aw, serialize))
 
   def persistentFromSerializationResult(serializationResult: SerializationResult): Try[PersistentRepr] = serializationResult match {
-    case Serialized(_, _, bytes, _, _)   ⇒ proxy.deserialize(bytes, classOf[PersistentRepr])
-    case NotSerialized(_, _, repr, _, _) ⇒ Success(repr)
+    case Serialized(_, _, bytes, _, _, _) ⇒ proxy.deserialize(bytes, classOf[PersistentRepr])
+    case NotSerialized(_, _, repr, _, _)  ⇒ Success(repr)
   }
 
   def deserializeRepr: Flow[SerializationResult, Try[PersistentRepr], NotUsed] =

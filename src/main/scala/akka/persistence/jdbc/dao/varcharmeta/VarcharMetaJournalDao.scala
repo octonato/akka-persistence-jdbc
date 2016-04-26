@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package akka.persistence.jdbc.dao.bytea
+package akka.persistence.jdbc.dao.varcharmeta
 
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.persistence.PersistentRepr
 import akka.persistence.jdbc.dao.JournalDao
-import akka.persistence.jdbc.dao.bytea.JournalTables.JournalRow
+import akka.persistence.jdbc.dao.varcharmeta.JournalTables.JournalRow
 import akka.persistence.jdbc.extension.AkkaPersistenceConfig
 import akka.persistence.jdbc.serialization.{ SerializationResult, Serialized }
-import akka.serialization.{ SerializationExtension, Serializer }
+import akka.serialization.{ Serialization, SerializationExtension, Serializer }
 import akka.stream.scaladsl.{ Flow, Source }
 import akka.stream.{ ActorMaterializer, Materializer }
 import slick.driver.JdbcProfile
@@ -35,18 +35,25 @@ import scala.util.{ Failure, Success, Try }
 /**
  * The DefaultJournalDao contains all the knowledge to persist and load serialized journal entries
  */
-class ByteArrayJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, system: ActorSystem) extends JournalDao {
+class VarcharMetaJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, system: ActorSystem) extends JournalDao {
+
   import profile.api._
 
   implicit val ec: ExecutionContext = system.dispatcher
 
   implicit val mat: Materializer = ActorMaterializer()(system)
 
-  val persistentReprSerializer: Serializer = SerializationExtension(system).serializerFor(classOf[PersistentRepr])
+  val serialization: Serialization = SerializationExtension(system)
 
-  val queries = new JournalQueries(profile, AkkaPersistenceConfig(system).journalTableConfiguration, AkkaPersistenceConfig(system).deletedToTableConfiguration)
+  val persistentReprSerializer: Serializer = serialization.serializerFor(classOf[PersistentRepr])
 
-  private def writeMessages: Flow[Try[Iterable[SerializationResult]], Try[Iterable[SerializationResult]], NotUsed] = Flow[Try[Iterable[SerializationResult]]].mapAsync(1) {
+  val config: AkkaPersistenceConfig = AkkaPersistenceConfig(system)
+
+  def getSerializer: Option[Serializer] = config.serializationConfiguration.serializationIdentity.map(id ⇒ serialization.serializerByIdentity(id))
+
+  val queries: JournalQueries = new JournalQueries(profile, AkkaPersistenceConfig(system).journalTableConfiguration, AkkaPersistenceConfig(system).deletedToTableConfiguration)
+
+  val writeMessages: Flow[Try[Iterable[SerializationResult]], Try[Iterable[SerializationResult]], NotUsed] = Flow[Try[Iterable[SerializationResult]]].mapAsync(1) {
     case element @ Success(xs) ⇒ writeList(xs).map(_ ⇒ element)
     case element @ Failure(t)  ⇒ Future.failed(t)
   }
@@ -56,7 +63,11 @@ class ByteArrayJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, sy
   } yield ()
 
   override def writeFlow: Flow[Try[Iterable[SerializationResult]], Try[Iterable[SerializationResult]], NotUsed] =
-    Flow[Try[Iterable[SerializationResult]]].via(writeMessages)
+    Flow[Try[Iterable[SerializationResult]]]
+      .map {
+        case element @ Success(xs) ⇒ getSerializer.map(serializer ⇒ serialize(xs, serializer)).getOrElse(element)
+        case element @ Failure(t)  ⇒ element
+      }.via(writeMessages)
 
   override def countJournal: Future[Int] = for {
     count ← db.run(queries.countJournal.result)
@@ -80,13 +91,21 @@ class ByteArrayJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, sy
     db.run(actions)
   }
 
+  /**
+   * Assumes that the message contains only the serialized payload.
+   */
   def mapToSerialized(row: JournalRow): Serialized = {
-    val repr: PersistentRepr = persistentReprSerializer.fromBinary(row.message).asInstanceOf[PersistentRepr]
-    Serialized(row.persistenceId, row.sequenceNumber, row.message, repr, row.tags, row.created)
+    val deserializedMessage: Array[Byte] = getSerializer
+      .map(serializer ⇒ deserialize(row.message, serializer))
+      .getOrElse(toByteArray(row.message))
+    println("===> DeserMessage: " + new String(deserializedMessage))
+    val repr = PersistentRepr(deserializedMessage, row.sequenceNumber, row.persistenceId, row.manifest, row.deleted, sender = null, writerUuid = row.writerUuid)
+    println("===> repr: " + repr)
+    Serialized(row.persistenceId, row.sequenceNumber, persistentReprSerializer.toBinary(repr), repr, row.tags, row.created)
   }
 
   override def messages(persistenceId: String, fromSequenceNr: Long, toSequenceNr: Long, max: Long): Source[SerializationResult, NotUsed] =
-    Source.fromPublisher(db.stream(queries.messagesQuery(persistenceId, fromSequenceNr, toSequenceNr, max).result)).map(mapToSerialized)
+    Source.fromPublisher(db.stream(queries.messagesQuery(persistenceId, fromSequenceNr, toSequenceNr, max).result)) map mapToSerialized
 
   override def persistenceIds(queryListOfPersistenceIds: Iterable[String]): Future[Seq[String]] = for {
     xs ← db.run(queries.journalRowByPersistenceIds(queryListOfPersistenceIds).result)
@@ -96,8 +115,8 @@ class ByteArrayJournalDao(db: JdbcBackend#Database, val profile: JdbcProfile, sy
     Source.fromPublisher(db.stream(queries.allPersistenceIdsDistinct.result))
 
   override def eventsByTag(tag: String, offset: Long): Source[SerializationResult, NotUsed] =
-    Source.fromPublisher(db.stream(queries.eventsByTag(tag, offset).result)).map(mapToSerialized)
+    Source.fromPublisher(db.stream(queries.eventsByTag(tag, offset).result)) map mapToSerialized
 
   override def eventsByPersistenceIdAndTag(persistenceId: String, tag: String, offset: Long): Source[SerializationResult, NotUsed] =
-    Source.fromPublisher(db.stream(queries.eventsByTagAndPersistenceId(persistenceId, tag, offset).result)).map(mapToSerialized)
+    Source.fromPublisher(db.stream(queries.eventsByTagAndPersistenceId(persistenceId, tag, offset).result)) map mapToSerialized
 }
