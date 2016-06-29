@@ -1,0 +1,7 @@
+[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/src/test/resources/general.conf,/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/target/scala-2.11/test-classes/general.conf)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/src/test/resources/h2-application.conf,/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/target/scala-2.11/test-classes/h2-application.conf)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/src/test/resources/logback.xml,/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/target/scala-2.11/test-classes/logback.xml)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/src/test/resources/mysql-application.conf,/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/target/scala-2.11/test-classes/mysql-application.conf)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/src/test/resources/oracle-application.conf,/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/target/scala-2.11/test-classes/oracle-application.conf)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/src/test/resources/postgres-application.conf,/Users/dennis/projects/akka-persistence-jdbc/jdbc-snapshot/target/scala-2.11/test-classes/postgres-application.conf)[0m

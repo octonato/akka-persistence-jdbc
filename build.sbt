@@ -14,88 +14,62 @@
  * limitations under the License.
  */
 
+import de.heikoseeberger.sbtheader.license.Apache2_0
+import scalariform.formatter.preferences._
+import com.typesafe.sbt.SbtScalariform
+
+version := "2.5.1-SNAPSHOT"
+
 name := "akka-persistence-jdbc"
 
 organization := "com.github.dnvriend"
 
-version := "2.5.0"
-
-isSnapshot := true
-
-resolvers += Resolver.typesafeRepo("releases")
-
 scalaVersion := "2.11.8"
-
-libraryDependencies ++= {
-  val akkaVersion = "2.4.7"
-  val slickVersion = "3.1.1"
-  val hikariCPVersion = "2.4.6"
-  Seq(
-    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-    "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
-    "com.typesafe.akka" %% "akka-persistence-query-experimental" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-    "com.typesafe.slick" %% "slick" % slickVersion,
-    "com.typesafe.slick" %% "slick-extensions" % "3.1.0",
-    "com.typesafe.slick" %% "slick-hikaricp" % slickVersion exclude("com.zaxxer", "HikariCP-java6"),
-    "com.zaxxer" % "HikariCP" % hikariCPVersion,
-    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion % Test,
-    "ch.qos.logback" % "logback-classic" % "1.1.7" % Test,
-    "com.typesafe.akka" %% "akka-persistence-tck" % akkaVersion % Test,
-    "org.postgresql" % "postgresql" % "9.4.1208" % Test,
-    "com.h2database" % "h2" % "1.4.191" % Test,
-    "mysql" % "mysql-connector-java" % "5.1.39" % Test,
-    "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
-    "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-    "org.scalatest" %% "scalatest" % "2.2.6" % Test,
-    "org.scalacheck" %% "scalacheck" % "1.12.5" % Test
-  )
-}
 
 fork in Test := true
 
 parallelExecution in Test := false
 
-licenses +=("Apache-2.0", url("http://opensource.org/licenses/apache2.0.php"))
-
-scalacOptions ++= Seq(
-  "-encoding",
-  "UTF-8",
-  "-deprecation",
-  "-feature",
-  "-unchecked",
-  "-Xlog-reflective-calls",
-//  "-Xlint",
-  "-language:higherKinds",
-  "-language:implicitConversions",
-  "-Ybackend:GenBCode",
-  "-Ydelambdafy:method",
-  "-target:jvm-1.8",
-  "-Xexperimental"
-)
-
-// enable scala code formatting //
-import scalariform.formatter.preferences._
-import com.typesafe.sbt.SbtScalariform
-
-// Scalariform settings
-SbtScalariform.autoImport.scalariformPreferences := SbtScalariform.autoImport.scalariformPreferences.value
+lazy val commonSettings = Seq(
+  scalaVersion := "2.11.8",
+  resolvers += Resolver.typesafeRepo("releases"),
+  resolvers += Resolver.jcenterRepo,
+  resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/maven-releases/",
+  fork in Test := true,
+  parallelExecution in Test := false,
+  licenses +=("Apache-2.0", url("http://opensource.org/licenses/apache2.0.php")),
+  SbtScalariform.autoImport.scalariformPreferences := SbtScalariform.autoImport.scalariformPreferences.value
   .setPreference(AlignSingleLineCaseStatements, true)
   .setPreference(AlignSingleLineCaseStatements.MaxArrowIndent, 100)
   .setPreference(DoubleIndentClassDeclaration, true)
-  .setPreference(RewriteArrowSymbols, true)
-
-// enable updating file headers //
-import de.heikoseeberger.sbtheader.license.Apache2_0
-
-headers := Map(
-  "scala" -> Apache2_0("2016", "Dennis Vriend"),
-  "conf" -> Apache2_0("2016", "Dennis Vriend", "#")
+  .setPreference(RewriteArrowSymbols, true),
+  scalacOptions ++= Seq("-feature", "-language:higherKinds", "-language:implicitConversions", "-deprecation", "-Ybackend:GenBCode", "-Ydelambdafy:method", "-target:jvm-1.8"),
+  headers := Map(
+    "scala" -> Apache2_0("2016", "Dennis Vriend"),
+    "conf" -> Apache2_0("2016", "Dennis Vriend", "#")
+  )
 )
 
-// build info configuration //
-buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, buildInfoBuildNumber)
+lazy val root = (project in file("."))
+  .aggregate(common, journal, query, snapshot)
+  .dependsOn(common, journal, query, snapshot)
+  .enablePlugins(AutomateHeaderPlugin)
 
-buildInfoPackage := "akka.persistence.jdbc"
+lazy val common = (project in file("jdbc-common"))
+  .settings(commonSettings:_*)
 
-enablePlugins(AutomateHeaderPlugin, BuildInfoPlugin)
+lazy val journal = (project in file("jdbc-journal"))
+  .settings(commonSettings:_*)
+  .dependsOn(common % "compile->compile;test->test")
+
+lazy val query = (project in file("jdbc-query"))
+  .settings(commonSettings:_*)
+  .dependsOn(common % "compile->compile;test->test", journal)
+
+lazy val snapshot = (project in file("jdbc-snapshot"))
+  .settings(commonSettings:_*)
+  .dependsOn(common % "compile->compile;test->test")
+
+//lazy val inmemory = (project in file("inmemory"))
+//  .settings(commonSettings:_*)
+//  .dependsOn(common)

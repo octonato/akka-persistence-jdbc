@@ -1,0 +1,3 @@
+#Successful Tests
+#Wed Jun 29 20:38:40 CEST 2016
+akka.persistence.jdbc.snapshot.PostgresSnapshotStoreSpec=1467225520713

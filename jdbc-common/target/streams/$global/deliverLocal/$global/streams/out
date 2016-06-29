@@ -1,0 +1,4 @@
+[0m[[0minfo[0m] [0m:: delivering :: akka-persistence-jdbc-common#akka-persistence-jdbc-common_2.11;0.1-SNAPSHOT :: 0.1-SNAPSHOT :: integration :: Wed Jun 29 19:34:47 CEST 2016[0m
+[0m[[0mdebug[0m] [0m	options = status=integration pubdate=Wed Jun 29 19:34:47 CEST 2016 validate=true resolveDynamicRevisions=true merge=true resolveId=null pubBranch=null[0m
+[0m[[0minfo[0m] [0m	delivering ivy file to /Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/ivy-0.1-SNAPSHOT.xml[0m
+[0m[[0mdebug[0m] [0m	deliver done (5ms)[0m

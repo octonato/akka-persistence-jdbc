@@ -1,0 +1,23 @@
+[0m[[0mdebug[0m] [0mjavaOptions: List()[0m
+[0m[[0mdebug[0m] [0mForking tests - parallelism = false[0m
+[0m[[0mdebug[0m] [0mCreate a single-thread test executor[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalacheck.ScalaCheckFramework produced 0 initial tasks for 0 tests.[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalatest.tools.Framework produced 1 initial tasks for 1 tests.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.config.ConfigOpsTest, sbt.ForkMain$SubclassFingerscan@1fdf469f, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mConfigOpsTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should parse field values to Try[A][0m[0m
+[0m[[0minfo[0m] [0m[32m- should parse field values with default values with empty config[0m[0m
+[0m[[0minfo[0m] [0m[32m- should parse field values with default values for wrong config[0m[0m
+[0m[[0minfo[0m] [0m[32m- should parse field values to with defaults[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 4 events.[0m
+[0m[[0minfo[0m] [0mScalaCheck[0m
+[0m[[0minfo[0m] [0mPassed: Total 0, Failed 0, Errors 0, Passed 0[0m
+[0m[[0minfo[0m] [0mScalaTest[0m
+[0m[[0minfo[0m] [0m[36mRun completed in 682 milliseconds.[0m[0m
+[0m[[0minfo[0m] [0m[36mTotal number of tests run: 4[0m[0m
+[0m[[0minfo[0m] [0m[36mSuites: completed 1, aborted 0[0m[0m
+[0m[[0minfo[0m] [0m[36mTests: succeeded 4, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0minfo[0m] [0m[32mAll tests passed.[0m[0m
+[0m[[0minfo[0m] [0mPassed: Total 4, Failed 0, Errors 0, Passed 4[0m
+[0m[[0mdebug[0m] [0mPassed tests:[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.config.ConfigOpsTest[0m

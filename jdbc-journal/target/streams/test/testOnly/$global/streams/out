@@ -1,0 +1,76 @@
+[0m[[0mdebug[0m] [0mjavaOptions: List()[0m
+[0m[[0mdebug[0m] [0mForking tests - parallelism = false[0m
+[0m[[0mdebug[0m] [0mCreate a single-thread test executor[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalacheck.ScalaCheckFramework produced 0 initial tasks for 0 tests.[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalatest.tools.Framework produced 3 initial tasks for 3 tests.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.journal.PostgresJournalSpec, sbt.ForkMain$SubclassFingerscan@7b28dd9d, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresJournalSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mA journal[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay all messages[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a lower sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using an upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a count limit[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a lower and upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a lower and upper sequence number bound and a count limit[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay a single if lower sequence number bound equals upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay a single message if count limit equals 1[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay messages if count limit equals 0[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay messages if lower  sequence number bound is greater than upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay messages if the persistent actor has not yet written messages[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay permanently deleted messages (range deletion)[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not reset highestSequenceNr after message deletion[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not reset highestSequenceNr after journal cleanup[0m[0m
+[0m[[0minfo[0m] [0m[32mA Journal optionally[0m[0m
+[0m[[0minfo[0m] [0m[32m+ CapabilityFlag `supportsRejectingNonSerializableObjects` was turned `on`.  [0m[0m
+[0m[[0minfo[0m] [0m[32m- may reject non-serializable events[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 15 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.journal.PostgresJournalPerfSpec, sbt.ForkMain$SubclassFingerscan@41549148, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresJournalPerfSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mA journal[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay all messages[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a lower sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using an upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a count limit[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a lower and upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay messages using a lower and upper sequence number bound and a count limit[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay a single if lower sequence number bound equals upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must replay a single message if count limit equals 1[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay messages if count limit equals 0[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay messages if lower  sequence number bound is greater than upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay messages if the persistent actor has not yet written messages[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not replay permanently deleted messages (range deletion)[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not reset highestSequenceNr after message deletion[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not reset highestSequenceNr after journal cleanup[0m[0m
+[0m[[0minfo[0m] [0m[32mA Journal optionally[0m[0m
+[0m[[0minfo[0m] [0m[32m+ CapabilityFlag `supportsRejectingNonSerializableObjects` was turned `on`.  [0m[0m
+[0m[[0minfo[0m] [0m[32m- may reject non-serializable events[0m[0m
+[0m[[0minfo[0m] [0m[32mA PersistentActor's performance[0m[0m
+[0m[[0minfo[0m] [0m[32m- must measure: persistAsync()-ing 1000 events[0m[0m
+[0m[[0minfo[0m] [0m[32m  + PersistAsync()-ing 1000 took 845 ms [0m[0m
+[0m[[0minfo[0m] [0m[32m  + Average time: 845 ms [0m[0m
+[0m[[0minfo[0m] [0m[32m- must measure: persist()-ing 1000 events[0m[0m
+[0m[[0minfo[0m] [0m[32m  + Persist()-ing 1000 took 1607 ms [0m[0m
+[0m[[0minfo[0m] [0m[32m  + Average time: 1607 ms [0m[0m
+[0m[[0minfo[0m] [0m[32m- must measure: recovering 1000 events[0m[0m
+[0m[[0minfo[0m] [0m[32m  + Recovering 1000 took 102 ms [0m[0m
+[0m[[0minfo[0m] [0m[32m  + Average time: 102 ms [0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 18 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.serialization.PostgresStoreOnlySerializableMessagesTest, sbt.ForkMain$SubclassFingerscan@6881b4d4, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresStoreOnlySerializableMessagesTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should persist a single serializable message[0m[0m
+[0m[[0minfo[0m] [0m[32m- should not persist a single non-serializable message[0m[0m
+[0m[[0minfo[0m] [0m[32m- should persist only serializable messages[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 3 events.[0m
+[0m[[0minfo[0m] [0mScalaCheck[0m
+[0m[[0minfo[0m] [0mPassed: Total 0, Failed 0, Errors 0, Passed 0[0m
+[0m[[0minfo[0m] [0mScalaTest[0m
+[0m[[0minfo[0m] [0m[36mRun completed in 9 seconds, 482 milliseconds.[0m[0m
+[0m[[0minfo[0m] [0m[36mTotal number of tests run: 36[0m[0m
+[0m[[0minfo[0m] [0m[36mSuites: completed 3, aborted 0[0m[0m
+[0m[[0minfo[0m] [0m[36mTests: succeeded 36, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0minfo[0m] [0m[32mAll tests passed.[0m[0m
+[0m[[0minfo[0m] [0mPassed: Total 36, Failed 0, Errors 0, Passed 36[0m
+[0m[[0mdebug[0m] [0mPassed tests:[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.journal.PostgresJournalSpec[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.serialization.PostgresStoreOnlySerializableMessagesTest[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.journal.PostgresJournalPerfSpec[0m

@@ -1,0 +1,59 @@
+[0m[[0mdebug[0m] [0mjavaOptions: List()[0m
+[0m[[0mdebug[0m] [0mForking tests - parallelism = false[0m
+[0m[[0mdebug[0m] [0mCreate a single-thread test executor[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalacheck.ScalaCheckFramework produced 0 initial tasks for 0 tests.[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalatest.tools.Framework produced 6 initial tasks for 6 tests.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.query.PostgresScalaAllPersistenceIdsTest, sbt.ForkMain$SubclassFingerscan@2a8afb28, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresScalaAllPersistenceIdsTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should not terminate the stream when there are not pids[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find persistenceIds for actors[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 2 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.query.PostgresScalaCurrentEventsByPersistenceIdTest, sbt.ForkMain$SubclassFingerscan@1f60c35e, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresScalaCurrentEventsByPersistenceIdTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should not find any events for unknown pid[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find events from an offset[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find events for actors[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 3 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.query.PostgresScalaCurrentEventsByTagTest, sbt.ForkMain$SubclassFingerscan@71558afe, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresScalaCurrentEventsByTagTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should not find an event by tag for unknown tag[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find all events by tag[0m[0m
+[0m[[0minfo[0m] [0m[32m- should persist and find a tagged event with multiple tags[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 3 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.query.PostgresScalaEventsByPersistenceIdTest, sbt.ForkMain$SubclassFingerscan@74f3cfcb, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresScalaEventsByPersistenceIdTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should not find any events for unknown pid[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find events from an offset[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find events for actor with pid 'my-1'[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find events for actor with pid 'my-1' and persisting messages to other actor[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find events for actor with pid 'my-2'[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 5 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.query.PostgresScalaEventsByTagTest, sbt.ForkMain$SubclassFingerscan@33bbc379, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresScalaEventsByTagTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should not find events for unknown tags[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find all events by tag[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find events by tag from an offset[0m[0m
+[0m[[0minfo[0m] [0m[32m- should persist and find tagged event for one tag[0m[0m
+[0m[[0minfo[0m] [0m[32m- should persist and find tagged events when stored with multiple tags[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 5 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.query.PostgresScalaCurrentPersistenceIdsTest, sbt.ForkMain$SubclassFingerscan@257ba810, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresScalaCurrentPersistenceIdsTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should not find any persistenceIds for empty journal[0m[0m
+[0m[[0minfo[0m] [0m[32m- should find persistenceIds for actors[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 2 events.[0m
+[0m[[0minfo[0m] [0mScalaCheck[0m
+[0m[[0minfo[0m] [0mPassed: Total 0, Failed 0, Errors 0, Passed 0[0m
+[0m[[0minfo[0m] [0mScalaTest[0m
+[0m[[0minfo[0m] [0m[36mRun completed in 12 seconds, 989 milliseconds.[0m[0m
+[0m[[0minfo[0m] [0m[36mTotal number of tests run: 20[0m[0m
+[0m[[0minfo[0m] [0m[36mSuites: completed 6, aborted 0[0m[0m
+[0m[[0minfo[0m] [0m[36mTests: succeeded 20, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0minfo[0m] [0m[32mAll tests passed.[0m[0m
+[0m[[0minfo[0m] [0mPassed: Total 20, Failed 0, Errors 0, Passed 20[0m
+[0m[[0mdebug[0m] [0mPassed tests:[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.query.PostgresScalaAllPersistenceIdsTest[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.query.PostgresScalaEventsByPersistenceIdTest[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.query.PostgresScalaCurrentPersistenceIdsTest[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.query.PostgresScalaEventsByTagTest[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.query.PostgresScalaCurrentEventsByPersistenceIdTest[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.query.PostgresScalaCurrentEventsByTagTest[0m

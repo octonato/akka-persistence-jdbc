@@ -1,0 +1,6 @@
+test:compile
+project root
+testOnly *Postgres*
+project root
+testOnly *Postgres*
+project snapshot

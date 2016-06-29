@@ -1,0 +1,8 @@
+test:compile
+projects
+project query
+testOnly *Postgres*
+projects
+testOnly *Postgres*
+project journal
+testOnly *Postgres*

@@ -1,0 +1,30 @@
+[0m[[0mdebug[0m] [0mjavaOptions: List()[0m
+[0m[[0mdebug[0m] [0mForking tests - parallelism = false[0m
+[0m[[0mdebug[0m] [0mCreate a single-thread test executor[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalacheck.ScalaCheckFramework produced 0 initial tasks for 0 tests.[0m
+[0m[[0mdebug[0m] [0mRunner for org.scalatest.tools.Framework produced 1 initial tasks for 1 tests.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(akka.persistence.jdbc.snapshot.PostgresSnapshotStoreSpec, sbt.ForkMain$SubclassFingerscan@786193e1, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0m[32mPostgresSnapshotStoreSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mA snapshot store[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not load a snapshot given an invalid persistenceId[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not load a snapshot given non-matching timestamp criteria[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not load a snapshot given non-matching sequence number criteria[0m[0m
+[0m[[0minfo[0m] [0m[32m- must load the most recent snapshot[0m[0m
+[0m[[0minfo[0m] [0m[32m- must load the most recent snapshot matching an upper sequence number bound[0m[0m
+[0m[[0minfo[0m] [0m[32m- must load the most recent snapshot matching upper sequence number and timestamp bounds[0m[0m
+[0m[[0minfo[0m] [0m[32m- must delete a single snapshot identified by sequenceNr in snapshot metadata[0m[0m
+[0m[[0minfo[0m] [0m[32m- must delete all snapshots matching upper sequence number and timestamp bounds[0m[0m
+[0m[[0minfo[0m] [0m[32m- must not delete snapshots with non-matching upper timestamp bounds[0m[0m
+[0m[[0minfo[0m] [0m[32m- must save and overwrite snapshot with same sequence number[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 10 events.[0m
+[0m[[0minfo[0m] [0mScalaCheck[0m
+[0m[[0minfo[0m] [0mPassed: Total 0, Failed 0, Errors 0, Passed 0[0m
+[0m[[0minfo[0m] [0mScalaTest[0m
+[0m[[0minfo[0m] [0m[36mRun completed in 1 second, 888 milliseconds.[0m[0m
+[0m[[0minfo[0m] [0m[36mTotal number of tests run: 10[0m[0m
+[0m[[0minfo[0m] [0m[36mSuites: completed 1, aborted 0[0m[0m
+[0m[[0minfo[0m] [0m[36mTests: succeeded 10, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0minfo[0m] [0m[32mAll tests passed.[0m[0m
+[0m[[0minfo[0m] [0mPassed: Total 10, Failed 0, Errors 0, Passed 10[0m
+[0m[[0mdebug[0m] [0mPassed tests:[0m
+[0m[[0mdebug[0m] [0m	akka.persistence.jdbc.snapshot.PostgresSnapshotStoreSpec[0m

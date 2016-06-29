@@ -1,0 +1,5 @@
+#Successful Tests
+#Wed Jun 29 20:38:15 CEST 2016
+akka.persistence.jdbc.serialization.PostgresStoreOnlySerializableMessagesTest=1467225495028
+akka.persistence.jdbc.journal.PostgresJournalSpec=1467225488352
+akka.persistence.jdbc.journal.PostgresJournalPerfSpec=1467225493260

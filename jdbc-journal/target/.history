@@ -1,0 +1,11 @@
+test:compile
+projects
+project snapshot
+projects
+testOnly *Postgres*
+project snapshot
+testOnly *Postgres*
+projects
+project query
+testOnly *Postgres*
+project query

@@ -1,0 +1,11 @@
+[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/LICENSE.txt,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/LICENSE.txt)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/h2,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/h2)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/mysql,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/mysql)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/oracle,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/oracle)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/postgres,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/postgres)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/h2/h2-schema.sql,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/h2/h2-schema.sql)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/mysql/mysql-schema.sql,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/mysql/mysql-schema.sql)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/oracle/oracle-schema.sql,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/oracle/oracle-schema.sql)[0m
+[0m[[0mdebug[0m] [0m	(/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/src/main/resources/schema/postgres/postgres-schema.sql,/Users/dennis/projects/akka-persistence-jdbc/jdbc-common/target/scala-2.11/classes/schema/postgres/postgres-schema.sql)[0m

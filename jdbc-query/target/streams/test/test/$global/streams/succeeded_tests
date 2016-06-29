@@ -1,0 +1,8 @@
+#Successful Tests
+#Wed Jun 29 20:38:35 CEST 2016
+akka.persistence.jdbc.query.PostgresScalaCurrentEventsByPersistenceIdTest=1467225505723
+akka.persistence.jdbc.query.PostgresScalaAllPersistenceIdsTest=1467225505192
+akka.persistence.jdbc.query.PostgresScalaEventsByTagTest=1467225515172
+akka.persistence.jdbc.query.PostgresScalaEventsByPersistenceIdTest=1467225510063
+akka.persistence.jdbc.query.PostgresScalaCurrentPersistenceIdsTest=1467225515359
+akka.persistence.jdbc.query.PostgresScalaCurrentEventsByTagTest=1467225506516
